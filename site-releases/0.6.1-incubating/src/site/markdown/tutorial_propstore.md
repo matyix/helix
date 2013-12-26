@@ -17,14 +17,15 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-# Helix Tutorial: Application Property Store
+Helix Tutorial: Application Property Store
+------------------------------------------
 
 In this chapter, we\'ll learn how to use the application property store.
 
 ### Property Store
 
-It is common that an application needs support for distributed, shared data structures.  Helix uses Zookeeper to store the application data and hence provides notifications when the data changes.
+It is common that an application needs support for distributed, shared data structures.  Helix uses ZooKeeper to store the application data and hence provides notifications when the data changes.
 
-While you could use Zookeeper directly, Helix supports caching the data and a write-through cache. This is far more efficient than reading from Zookeeper for every access.
+While you could use ZooKeeper directly, Helix supports caching the data with a write-through cache. This is far more efficient than reading from ZooKeeper for every access.
 
 See [HelixManager.getHelixPropertyStore](http://helix.incubator.apache.org/javadocs/0.6.1-incubating/reference/org/apache/helix/store/package-summary.html) for details.

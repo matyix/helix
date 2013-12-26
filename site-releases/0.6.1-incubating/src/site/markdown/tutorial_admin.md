@@ -17,11 +17,12 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-# Helix Tutorial: Admin Operations
+Helix Tutorial: Admin Operations
+--------------------------------
 
 Helix provides interfaces for the operator to administer the cluster.  For convenience, there is a command line interface as well as a REST interface.
 
-###  Helix Admin operations
+### Helix Admin Operations
 
 First, make sure you get to the command-line tool, or include it in your shell PATH.
 
@@ -41,127 +42,125 @@ All other commands have this form:
 ./helix-admin.sh --zkSvr <ZookeeperServerAddress (Required)> <command> <parameters>
 ```
 
-Now, here are the admin commands:
+### Commands
 
 Add a new cluster
 
 ```
-   --addCluster <clusterName>                              
+--addCluster <clusterName>
 ```
 
 Add a new Instance to a cluster
 
 ```
-   --addNode <clusterName> <InstanceAddress (host:port)>
+--addNode <clusterName> <InstanceAddress (host:port)>
 ```
 
 Add a State model to a cluster
-_WE NEED A SPEC FOR A VALID STATE MODEL_                                    
 
 ```
-   --addStateModelDef <clusterName> <filename>>    
+--addStateModelDef <clusterName> <filename>
 ```
 
 Add a resource to a cluster
 
 ```
-   --addResource <clusterName> <resourceName> <partitionNum> <stateModelRef> <mode (AUTO_REBALANCE|AUTO|CUSTOM)>
+--addResource <clusterName> <resourceName> <partitionNum> <stateModelRef> <mode (AUTO_REBALANCE|AUTO|CUSTOMIZED)>
 ```
 
 Upload an IdealState (Partition to Node Mapping)
-_WE NEED A SPEC FOR A VALID IDEAL STATE_
 
 ```
-   --addIdealState <clusterName> <resourceName> <filename>
+--addIdealState <clusterName> <resourceName> <filename>
 ```
 
 Delete a cluster
 
 ```
-   --dropCluster <clusterName>                                                                         
+--dropCluster <clusterName>
 ```
 
 Delete a resource (drop an existing resource from a cluster)
 
 ```
-   --dropResource <clusterName> <resourceName>
+--dropResource <clusterName> <resourceName>
 ```
 
 Drop an existing instance from a cluster
 
 ```
-   --dropNode <clusterName> <InstanceAddress (host:port)>
+--dropNode <clusterName> <InstanceAddress (host:port)>
 ```
 
-Enable/disable the entire cluster. This will pause the controller, which means no transitions will be trigger, but the existing nodes in the cluster continue to function, but without any management by the controller.
+Enable/disable the entire cluster. This will pause the controller, which means no transitions will be triggered, but the existing nodes in the cluster continue to function without any management by the controller.
 
 ```
-   --enableCluster <clusterName> <true/false>
+--enableCluster <clusterName> <true/false>
 ```
 
-Enable/disable an instance. Useful to take a node out of the cluster for maintenance/upgrade.
+Enable/disable an instance. This is useful to take a node out of the cluster for maintenance/upgrade.
 
 ```
-   --enableInstance <clusterName> <InstanceName> <true/false>
+--enableInstance <clusterName> <InstanceName> <true/false>
 ```
 
 Enable/disable a partition
 
 ```
-   --enablePartition <clusterName> <instanceName> <resourceName> <partitionName> <true/false>
+--enablePartition <clusterName> <instanceName> <resourceName> <partitionName> <true/false>
 ```
 
-Query info of a cluster
+Query information about a cluster
 
 ```
-   --listClusterInfo <clusterName>
+--listClusterInfo <clusterName>
 ```
 
 List existing clusters (remember, Helix can manage multiple clusters)
 
 ```
-   --listClusters
+--listClusters
 ```
 
-Query info of a single Instance in a cluster
+Query info of a single instance in a cluster
 
 ```
-   --listInstanceInfo <clusterName> <InstanceName>
+--listInstanceInfo <clusterName> <InstanceName>
 ```
 
 List instances in a cluster
 
 ```
-   --listInstances <clusterName>
+--listInstances <clusterName>
 ```
 
-Query info of a partition
+Query information about a partition
 
 ```
-   --listPartitionInfo <clusterName> <resourceName> <partitionName>
+--listPartitionInfo <clusterName> <resourceName> <partitionName>
 ```
 
-Query info of a resource
+Query information about a resource
 
 ```
-   --listResourceInfo <clusterName> <resourceName>
+--listResourceInfo <clusterName> <resourceName>
 ```
 
 List resources hosted in a cluster
 
 ```
-   --listResources <clusterName>
+--listResources <clusterName>
 ```
 
-Query info of a state model in a cluster
+Query information about a state model in a cluster
 
 ```
-   --listStateModel <clusterName> <stateModelName>
+--listStateModel <clusterName> <stateModelName>
 ```
 
-Query info of state models in a cluster
+Query information about state models in a cluster
 
 ```
-   --listStateModels <clusterName>                                                                     
+--listStateModels <clusterName>
 ```
 

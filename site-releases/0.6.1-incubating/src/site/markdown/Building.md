@@ -20,7 +20,9 @@ under the License.
 Build Instructions
 ------------------
 
-Requirements: Jdk 1.6+, Maven 2.0.8+
+### From Source
+
+Requirements: JDK 1.6+, Maven 2.0.8+
 
 ```
 git clone https://git-wip-us.apache.org/repos/asf/incubator-helix.git
@@ -29,7 +31,7 @@ git checkout tags/helix-0.6.1-incubating
 mvn install package -DskipTests
 ```
 
-Maven dependency
+### Maven Dependency
 
 ```
 <dependency>
@@ -38,9 +40,4 @@ Maven dependency
   <version>0.6.1-incubating</version>
 </dependency>
 ```
-
-Download
---------
-
-[0.6.1-incubating](./download.html)
 

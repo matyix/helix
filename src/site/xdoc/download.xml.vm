@@ -22,7 +22,7 @@ under the License.
           xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
   <properties>
-    <title>Apache Incubator Helix Downloads</title>
+    <title>Apache Helix Downloads</title>
     <author email="dev@helix.incubator.apache.org">Apache Helix Documentation Team</author>
   </properties>
 
@@ -33,7 +33,7 @@ under the License.
       </macro>
     </div>
 
-    <section name="Introduction">
+    <section name="Apache Helix Downloads">
       <p>Apache Helix artifacts are distributed in source and binary form under the terms of the
         <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.
         See the included <tt>LICENSE</tt> and <tt>NOTICE</tt> files included in each artifact for additional license

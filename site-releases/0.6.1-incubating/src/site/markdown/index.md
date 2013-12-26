@@ -17,18 +17,19 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-Navigating the Documentation
-----------------------------
+<head>
+  <title>Helix 0.6.1-incubating Documentation</title>
+</head>
 
-### Conceptual Understanding
+### Get Helix
 
-[Concepts / Terminology](./Concepts.html)
+[Download](./download.html)
 
-[Architecture](./Architecture.html)
+[Building](./Building.html)
 
-### Hands-on Helix
+[Release Notes](./releasenotes/release-0.6.1-incubating.html)
 
-[Getting Helix](./Building.html)
+### Hands-On
 
 [Quickstart](./Quickstart.html)
 
@@ -46,9 +47,5 @@ Navigating the Documentation
 
 [Service discovery](./recipes/service_discovery.html)
 
-[Distributed Task DAG Execution](./recipes/task_dag_execution.html)
-
-### Download
-
-[0.6.1-incubating](./download.html)
+[Distributed task DAG execution](./recipes/task_dag_execution.html)
 

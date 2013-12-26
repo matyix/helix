@@ -24,9 +24,13 @@ under the License.
 Client Libraries
 ----------------------------
 
-The following client libraries, in addition to the HelixAgent Java interface, are
+The following client libraries, in addition to the Helix Agent Java interface, are
 available for Helix:
 
-### Python 
+### Clojure
+
+* `clj-helix` - https://github.com/Factual/clj-helix
+
+### Python
 
 * `pyhelix` - https://github.com/kanakb/pyhelix

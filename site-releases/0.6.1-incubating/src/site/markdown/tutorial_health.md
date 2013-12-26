@@ -17,15 +17,16 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-# Helix Tutorial: Customizing Health Checks
+Helix Tutorial: Customizing Health Checks
+-----------------------------------------
 
-In this chapter, we\'ll learn how to customize the health check, based on metrics of your distributed system.  
+In this chapter, we\'ll learn how to customize the health check, based on metrics of your distributed system.
 
 ### Health Checks
 
-Note: _this in currently in development mode, not yet ready for production._
+Note: _this in currently in development mode, not yet ready for production_
 
-Helix provides the ability for each node in the system to report health metrics on a periodic basis. 
+Helix provides the ability for each node in the system to report health metrics on a periodic basis.
 
 Helix supports multiple ways to aggregate these metrics:
 
@@ -36,7 +37,7 @@ Helix supports multiple ways to aggregate these metrics:
 
 Helix persists the aggregated value only.
 
-Applications can define a threshold on the aggregate values according to the SLAs, and when the SLA is violated Helix will fire an alert. 
+Applications can define a threshold on the aggregate values according to the SLAs, and when the SLA is violated Helix will fire an alert.
 Currently Helix only fires an alert, but in a future release we plan to use these metrics to either mark the node dead or load balance the partitions.
 This feature will be valuable for distributed systems that support multi-tenancy and have a large variation in work load patterns.  In addition, this can be used to detect skewed partitions (hotspots) and rebalance the cluster.
 

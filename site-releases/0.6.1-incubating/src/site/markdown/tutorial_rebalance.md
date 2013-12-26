@@ -17,7 +17,8 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-# Helix Tutorial: Rebalancing Algorithms
+Helix Tutorial: Rebalancing Algorithms
+--------------------------------------
 
 The placement of partitions in a distributed system is essential for the reliability and scalability of the system.  For example, when a node fails, it is important that the partitions hosted on that node are reallocated evenly among the remaining nodes. Consistent hashing is one such algorithm that can satisfy this guarantee.  Helix provides a variant of consistent hashing based on the RUSH algorithm.
 
@@ -36,21 +37,21 @@ Helix has three options for rebalancing, in increasing order of customization by
 
 * AUTO_REBALANCE
 * AUTO
-* CUSTOM
+* CUSTOMIZED
 
 ```
-            |AUTO REBALANCE|   AUTO     |   CUSTOM  |       
-            -----------------------------------------
-   LOCATION | HELIX        |  APP       |  APP      |
-            -----------------------------------------
-      STATE | HELIX        |  HELIX     |  APP      |
-            -----------------------------------------
+          |AUTO REBALANCE|   AUTO     |   CUSTOMIZED  |
+          ---------------------------------------------
+ LOCATION | HELIX        |  APP       |     APP       |
+          ---------------------------------------------
+    STATE | HELIX        |  HELIX     |     APP       |
+          ---------------------------------------------
 ```
 
 
 ### AUTO_REBALANCE
 
-When the idealstate mode is set to AUTO_REBALANCE, Helix controls both the location of the replica along with the state. This option is useful for applications where creation of a replica is not expensive. 
+When the ideal state mode is set to AUTO_REBALANCE, Helix controls both the location of the replica along with the state. This option is useful for applications where creation of a replica is not expensive.
 
 For example, consider this system that uses a MasterSlave state model, with 3 partitions and 2 replicas in the ideal state.
 
@@ -100,12 +101,12 @@ If there are 3 nodes in the cluster, then Helix will balance the masters and sla
 }
 ```
 
-Another typical example is evenly distributing a group of tasks among the currently healthy processes. For example, if there are 60 tasks and 4 nodes, Helix assigns 15 tasks to each node. 
-When one node fails, Helix redistributes its 15 tasks to the remaining 3 nodes, resulting in a balanced 20 tasks per node. Similarly, if a node is added, Helix re-allocates 3 tasks from each of the 4 nodes to the 5th node, resulting in a balanced distribution of 12 tasks per node.. 
+Another typical example is evenly distributing a group of tasks among the currently healthy processes. For example, if there are 60 tasks and 4 nodes, Helix assigns 15 tasks to each node.
+When one node fails, Helix redistributes its 15 tasks to the remaining 3 nodes, resulting in a balanced 20 tasks per node. Similarly, if a node is added, Helix re-allocates 3 tasks from each of the 4 nodes to the 5th node, resulting in a balanced distribution of 12 tasks per node.
 
-#### AUTO
+### AUTO
 
-When the application needs to control the placement of the replicas, use the AUTO idealstate mode.
+When the application needs to control the placement of the replicas, use the AUTO ideal state mode.
 
 Example: In the ideal state below, the partition \'MyResource_0\' is constrained to be placed only on node1 or node2.  The choice of _state_ is still controlled by Helix.  That means MyResource_0.MASTER could be on node1 and MyResource_0.SLAVE on node2, or vice-versa but neither would be placed on node3.
 
@@ -130,12 +131,12 @@ Example: In the ideal state below, the partition \'MyResource_0\' is constrained
 
 The MasterSlave state model requires that a partition has exactly one MASTER at all times, and the other replicas should be SLAVEs.  In this simple example with 2 replicas per partition, there would be one MASTER and one SLAVE.  Upon failover, a SLAVE has to assume mastership, and a new SLAVE will be generated.
 
-In this mode when node1 fails, unlike in AUTO-REBALANCE mode the partition is _not_ moved from node1 to node3. Instead, Helix will decide to change the state of MyResource_0 on node2 from SLAVE to MASTER, based on the system constraints. 
+In this mode when node1 fails, unlike in AUTO_REBALANCE mode, the partition is _not_ moved from node1 to node3. Instead, Helix will decide to change the state of MyResource_0 on node2 from SLAVE to MASTER, based on the system constraints.
 
-#### CUSTOM
+### CUSTOMIZED
 
-Finally, Helix offers a third mode called CUSTOM, in which the application controls the placement _and_ state of each replica. The application needs to implement a callback interface that Helix invokes when the cluster state changes. 
-Within this callback, the application can recompute the idealstate. Helix will then issue appropriate transitions such that _Idealstate_ and _Currentstate_ converges.
+Finally, Helix offers a third mode called CUSTOMIZED, in which the application controls the placement _and_ state of each replica. The application needs to implement a callback interface that Helix invokes when the cluster state changes.
+Within this callback, the application can recompute the ideal state. Helix will then issue appropriate transitions such that the _IdealState_ and _CurrentState_ converge.
 
 Here\'s an example, again with 3 partitions, 2 replicas per partition, and the MasterSlave state model:
 
@@ -165,4 +166,4 @@ Here\'s an example, again with 3 partitions, 2 replicas per partition, and the M
 }
 ```
 
-Suppose the current state of the system is 'MyResource_0' -> {N1:MASTER, N2:SLAVE} and the application changes the ideal state to 'MyResource_0' -> {N1:SLAVE,N2:MASTER}. While the application decides which node is MASTER and which is SLAVE, Helix will not blindly issue MASTER-->SLAVE to N1 and SLAVE-->MASTER to N2 in parallel, since that might result in a transient state where both N1 and N2 are masters, which violates the MasterSlave constraint that there is exactly one MASTER at a time.  Helix will first issue MASTER-->SLAVE to N1 and after it is completed, it will issue SLAVE-->MASTER to N2. 
+Suppose the current state of the system is 'MyResource_0' \-\> {N1:MASTER, N2:SLAVE} and the application changes the ideal state to 'MyResource_0' \-\> {N1:SLAVE,N2:MASTER}. While the application decides which node is MASTER and which is SLAVE, Helix will not blindly issue MASTER \-\-\> SLAVE to N1 and SLAVE \-\-\> MASTER to N2 in parallel, since that might result in a transient state where both N1 and N2 are masters, which violates the MasterSlave constraint that there is exactly one MASTER at a time.  Helix will first issue MASTER \-\-\> SLAVE to N1 and after it is completed, it will issue SLAVE \-\-\> MASTER to N2.

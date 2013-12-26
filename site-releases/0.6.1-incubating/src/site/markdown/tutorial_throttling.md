@@ -17,13 +17,14 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-# Helix Tutorial: Throttling
+Helix Tutorial: Throttling
+--------------------------
 
-In this chapter, we\'ll learn how to control the parallel execution of cluster tasks.  Only a centralized cluster manager with global knowledge is capable of coordinating this decision.
+In this chapter, we\'ll learn how to control the parallel execution of cluster tasks.  Only a centralized cluster manager with global knowledge (i.e. Helix) is capable of coordinating this decision.
 
 ### Throttling
 
-Since all state changes in the system are triggered through transitions, Helix can control the number of transitions that can happen in parallel. Some of the transitions may be light weight, but some might involve moving data, which is quite expensive from a network and iops perspective.
+Since all state changes in the system are triggered through transitions, Helix can control the number of transitions that can happen in parallel. Some of the transitions may be lightweight, but some might involve moving data, which is quite expensive from a network and IOPS perspective.
 
 Helix allows applications to set a threshold on transitions. The threshold can be set at multiple scopes:
 

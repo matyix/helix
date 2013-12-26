@@ -25,7 +25,7 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/guides/mini/guide-apt-format.html
 
-Helix release process
+Helix Release Process
 
  [[1]] Post to dev@helix.incubator.apache.org a few days before you plan to do a Helix release
 
