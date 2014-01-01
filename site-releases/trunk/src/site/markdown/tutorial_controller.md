@@ -21,18 +21,17 @@ under the License.
   <title>Tutorial - Controller</title>
 </head>
 
-# [Helix Tutorial](./Tutorial.html): Controller
+## [Helix Tutorial](./Tutorial.html): Controller
 
 Next, let\'s implement the controller.  This is the brain of the cluster.  Helix makes sure there is exactly one active controller running the cluster.
 
-### Start the Helix Agent
-
+### Start the Helix Controller
 
 It requires the following parameters:
- 
+
 * clusterId: A logical ID to represent the group of nodes
 * controllerId: A logical ID of the process creating the controller instance. Generally this is host:port.
-* zkConnectString: Connection string to Zookeeper. This is of the form host1:port1,host2:port2,host3:port3. 
+* zkConnectString: Connection string to Zookeeper. This is of the form host1:port1,host2:port2,host3:port3.
 
 ```
 HelixConnection connection = new ZKHelixConnection(zkConnectString);
@@ -50,13 +49,13 @@ HelixController controller = connection.createController(clusterId, controllerId
 controller.startAsync();
 ```
 The snippet above shows how the controller is started. You can also start the controller using command line interface.
-  
+
 ```
 cd helix/helix-core/target/helix-core-pkg/bin
 ./run-helix-controller.sh --zkSvr <Zookeeper ServerAddress (Required)>  --cluster <Cluster name (Required)>
 ```
 
-### Controller deployment modes
+### Controller Deployment Modes
 
 Helix provides multiple options to deploy the controller.
 
@@ -72,7 +71,7 @@ If setting up a separate controller process is not viable, then it is possible t
 
 #### CONTROLLER AS A SERVICE
 
-One of the cool features we added in Helix is to use a set of controllers to manage a large number of clusters. 
+One of the cool features we added in Helix is to use a set of controllers to manage a large number of clusters.
 
 For example if you have X clusters to be managed, instead of deploying X*3 (3 controllers for fault tolerance) controllers for each cluster, one can deploy just 3 controllers.  Each controller can manage X/3 clusters.  If any controller fails, the remaining two will manage X/2 clusters.
 

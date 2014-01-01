@@ -20,6 +20,8 @@ under the License.
 Build Instructions
 ------------------
 
+### From Source
+
 Requirements: JDK 1.6+, Maven 2.0.8+
 
 ```

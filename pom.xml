@@ -505,6 +505,8 @@ under the License.
             <ignorePathsToDelete>
               <ignorePathToDelete>javadocs</ignorePathToDelete>
               <ignorePathToDelete>javadocs**</ignorePathToDelete>
+              <ignorePathToDelete>apidocs</ignorePathToDelete>
+              <ignorePathToDelete>apidocs**</ignorePathToDelete>
             </ignorePathsToDelete>
           </configuration>
           <dependencies>

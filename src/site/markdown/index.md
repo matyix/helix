@@ -73,7 +73,7 @@ Apache Helix has two new releases:
 
     [\[Quick Start\]](./site-releases/0.6.2-incubating-site/Quickstart.html) [\[Release Notes\]](./releasenotes/release-0.6.2-incubating.html)
 
-* [0.7.0-incubating](./site-releases/0.7.0-incubating-site/index.html) - A release that includes high-level APIs to logically interact with Participants, Controllers, Resources, and other Helix constructs. __This release is an alpha and APIs are in the process of being finalized__. Feel free to play with it and provide any feedback you have!
+* [0.7.0-incubating](./site-releases/0.7.0-incubating-site/index.html) (alpha) - A release that includes high-level APIs to logically interact with Participants, Controllers, Resources, and other Helix constructs. __This release is an alpha and APIs are in the process of being finalized__. Feel free to play with it and provide any feedback you have!
 
     [\[Quick Start\]](./site-releases/0.7.0-incubating-site/Quickstart.html) [\[Release Notes\]](./releasenotes/release-0.7.0-incubating.html)
 

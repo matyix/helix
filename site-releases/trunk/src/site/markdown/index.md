@@ -18,21 +18,14 @@ under the License.
 -->
 
 <head>
-  <title>Home</title>
+  <title>Helix Trunk Documentation</title>
 </head>
 
-Navigating the Documentation
-----------------------------
+### Get Helix
 
-### Conceptual Understanding
+[Building](./Building.html)
 
-[Concepts / Terminology](./Concepts.html)
-
-[Architecture](./Architecture.html)
-
-### Hands-on Helix
-
-[Getting Helix](./Building.html)
+### Hands-On
 
 [Quickstart](./Quickstart.html)
 
@@ -50,7 +43,7 @@ Navigating the Documentation
 
 [Service discovery](./recipes/service_discovery.html)
 
-[Distributed Task DAG Execution](./recipes/task_dag_execution.html)
+[Distributed task DAG execution](./recipes/task_dag_execution.html)
 
 [User-Defined Rebalancer Example](./recipes/user_def_rebalancer.html)
 

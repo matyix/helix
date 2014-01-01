@@ -21,7 +21,7 @@ under the License.
   <title>Tutorial - User-Defined Rebalancing</title>
 </head>
 
-# [Helix Tutorial](./Tutorial.html): User-Defined Rebalancing
+## [Helix Tutorial](./Tutorial.html): User-Defined Rebalancing
 
 Even though Helix can compute both the location and the state of replicas internally using a default fully-automatic rebalancer, specific applications may require rebalancing strategies that optimize for different requirements. Thus, Helix allows applications to plug in arbitrary rebalancer algorithms that implement a provided interface. One of the main design goals of Helix is to provide maximum flexibility to any distributed application. Thus, it allows applications to fully implement the rebalancer, which is the core constraint solver in the system, if the application developer so chooses.
 
@@ -53,7 +53,7 @@ There are two key fields to set to specify that a pluggable rebalancer should be
 
 ### Example
 
-In the next release (0.7.0), we will provide a full example of a user-defined rebalancer in action.
+In the next release (0.7.0), we will provide a full recipe of a user-defined rebalancer in action.
 
 Consider the case where partitions are locks in a lock manager and 6 locks are to be distributed evenly to a set of participants, and only one participant can hold each lock. We can define a rebalancing algorithm that simply takes the modulus of the lock number and the number of participants to evenly distribute the locks across participants. Helix allows capping the number of partitions a participant can accept, but since locks are lightweight, we do not need to define a restriction in this case. The following is a succinct implementation of this algorithm.
 

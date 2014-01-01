@@ -21,7 +21,7 @@ under the License.
   <title>Tutorial - Logical Accessors</title>
 </head>
 
-# [Helix Tutorial](./Tutorial.html): Logical Accessors
+## [Helix Tutorial](./Tutorial.html): Logical Accessors
 
 Helix constructs follow a logical hierarchy. A cluster contains participants, and serve logical resources. Each resource can be divided into partitions, which themselves can be replicated. Helix now supports configuring and modifying clusters programmatically in a hierarchical way using logical accessors.
 
@@ -41,31 +41,31 @@ ParticipantConfig participantConfig = new ParticipantConfig.Builder(participantI
 
 #### Configure a Resource
 
-##### RebalancerContext
-A Resource is essentially a combination of a RebalancerContext and a UserConfig. A [RebalancerContext](http://helix.incubator.apache.org/apidocs/reference/org/apache/helix/controller/rebalancer/context/RebalancerContext.html) consists of all the key properties required to rebalance a resource, including how it is partitioned and replicated, and what state model it follows. Most Helix resources will make use of a [PartitionedRebalancerContext](http://helix.incubator.apache.org/apidocs/reference/org/apache/helix/controller/rebalancer/context/PartitionedRebalancerContext.html), which is a RebalancerContext for resources that are partitioned.
+##### RebalancerConfig
+A Resource is essentially a combination of a RebalancerConfig and a UserConfig. A [RebalancerConfig](http://helix.incubator.apache.org/apidocs/reference/org/apache/helix/controller/rebalancer/config/RebalancerConfig.html) consists of all the key properties required to rebalance a resource, including how it is partitioned and replicated, and what state model it follows. Most Helix resources will make use of a [PartitionedRebalancerConfig](http://helix.incubator.apache.org/apidocs/reference/org/apache/helix/controller/rebalancer/config/PartitionedRebalancerConfig.html), which is a RebalancerConfig for resources that are partitioned.
 
-Recall that there are four [rebalancing modes](./tutorial_rebalance.html) that Helix provides, and so Helix also provides the following subclasses for PartitionedRebalancerContext:
+Recall that there are four [rebalancing modes](./tutorial_rebalance.html) that Helix provides, and so Helix also provides the following subclasses for PartitionedRebalancerConfig:
 
-* [FullAutoRebalancerContext](http://helix.incubator.apache.org/apidocs/reference/org/apache/helix/controller/rebalancer/context/FullAutoRebalancerContext.html) for FULL_AUTO mode.
-* [SemiAutoRebalancerContext](http://helix.incubator.apache.org/apidocs/reference/org/apache/helix/controller/rebalancer/context/SemiAutoRebalancerContext.html) for SEMI_AUTO mode. This class allows a user to specify "preference lists" to indicate where each partition should ideally be served
-* [CustomRebalancerContext](http://helix.incubator.apache.org/apidocs/reference/org/apache/helix/controller/rebalancer/context/CustomRebalancerContext.html) for CUSTOMIZED mode. This class allows a user tp specify "preference maps" to indicate the location and state for each partition replica.
+* [FullAutoRebalancerConfig](http://helix.incubator.apache.org/apidocs/reference/org/apache/helix/controller/rebalancer/config/FullAutoRebalancerConfig.html) for FULL_AUTO mode.
+* [SemiAutoRebalancerConfig](http://helix.incubator.apache.org/apidocs/reference/org/apache/helix/controller/rebalancer/config/SemiAutoRebalancerConfig.html) for SEMI_AUTO mode. This class allows a user to specify "preference lists" to indicate where each partition should ideally be served
+* [CustomRebalancerConfig](http://helix.incubator.apache.org/apidocs/reference/org/apache/helix/controller/rebalancer/config/CustomRebalancerConfig.html) for CUSTOMIZED mode. This class allows a user tp specify "preference maps" to indicate the location and state for each partition replica.
 
-Helix also supports arbitrary subclasses of PartitionedRebalancerContext and even arbitrary implementations of RebalancerContext for applications that need a user-defined approach for rebalancing. For more, see [User-Defined Rebalancing](./tutorial_user_def_rebalancer.html)
+Helix also supports arbitrary subclasses of PartitionedRebalancerConfig and even arbitrary implementations of RebalancerConfig for applications that need a user-defined approach for rebalancing. For more, see [User-Defined Rebalancing](./tutorial_user_def_rebalancer.html)
 
 ##### In Action
 
-Here is an example of a configured resource with a rebalancer context for FULL_AUTO mode and two partitions:
+Here is an example of a configured resource with a rebalancer config for FULL_AUTO mode and two partitions:
 
 ```
 ResourceId resourceId = ResourceId.from("sampleResource");
 StateModelDefinition stateModelDef = getStateModelDef();
 Partition partition1 = new Partition(PartitionId.from(resourceId, "1"));
 Partition partition2 = new Partition(PartitionId.from(resourceId, "2"));
-FullAutoRebalancerContext rebalanceContext =
-    new FullAutoRebalancerContext.Builder(resourceId).replicaCount(1).addPartition(partition1)
+FullAutoRebalancerConfig rebalanceConfig =
+    new FullAutoRebalancerConfig.Builder(resourceId).replicaCount(1).addPartition(partition1)
         .addPartition(partition2).stateModelDefId(stateModelDef.getStateModelDefId()).build();
 ResourceConfig resourceConfig =
-    new ResourceConfig.Builder(resourceId).rebalancerContext(rebalanceContext).build();
+    new ResourceConfig.Builder(resourceId).rebalancerConfig(rebalanceConfig).build();
 ```
 
 #### Add the Cluster

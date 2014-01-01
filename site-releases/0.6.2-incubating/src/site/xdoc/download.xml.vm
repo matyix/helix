@@ -24,7 +24,7 @@ under the License.
           xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
   <properties>
-    <title>Apache Incubator Helix Downloads</title>
+    <title>Apache Helix Downloads</title>
     <author email="dev@helix.incubator.apache.org">Apache Helix Documentation Team</author>
   </properties>
 

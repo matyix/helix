@@ -45,7 +45,7 @@ Helix provides a default implementation RoutingTableProvider that caches the clu
 ```
 manager = HelixManagerFactory.getZKHelixManager(clusterName,
                                                 instanceName,
-                                                InstanceType.PARTICIPANT,
+                                                InstanceType.SPECTATOR,
                                                 zkConnectString);
 manager.connect();
 RoutingTableProvider routingTableProvider = new RoutingTableProvider();

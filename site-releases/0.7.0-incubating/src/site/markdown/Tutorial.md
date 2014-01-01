@@ -30,7 +30,7 @@ Convention: we first cover the _basic_ approach, which is the easiest to impleme
 
 ### Prerequisites
 
-1. Read [Concepts/Terminology](./Concepts.html) and [Architecture](./Architecture.html)
+1. Read [Concepts/Terminology](../../Concepts.html) and [Architecture](../../Architecture.html)
 2. Read the [Quickstart guide](./Quickstart.html) to learn how Helix models and manages a cluster
 3. Install Helix source.  See: [Quickstart](./Quickstart.html) for the steps.
 
@@ -54,17 +54,17 @@ Convention: we first cover the _basic_ approach, which is the easiest to impleme
 
 First, we need to set up the system.  Let\'s walk through the steps in building a distributed system using Helix. We will show how to do this using both the Java admin interface, as well as the [cluster accessor](./tutorial_accessors.html) interface. You can choose either interface depending on which most closely matches your needs.
 
-### Start Zookeeper
+#### Start ZooKeeper
 
-This starts a zookeeper in standalone mode. For production deployment, see [Apache Zookeeper](http://zookeeper.apache.org) for instructions.
+This starts a zookeeper in standalone mode. For production deployment, see [Apache ZooKeeper](http://zookeeper.apache.org) for instructions.
 
 ```
 ./start-standalone-zookeeper.sh 2199 &
 ```
 
-### Create a cluster
+#### Create a Cluster
 
-Creating a cluster will define the cluster in appropriate znodes on zookeeper.
+Creating a cluster will define the cluster in appropriate ZNodes on ZooKeeper.
 
 Using the Java accessor API:
 
@@ -103,7 +103,7 @@ Using the command-line interface:
 ```
 
 
-### Configure the nodes of the cluster
+#### Configure the Nodes of the Cluster
 
 First we\'ll add new nodes to the cluster, then configure the nodes in the cluster. Each node in the cluster must be uniquely identifiable.
 The most commonly used convention is hostname_port.
@@ -149,18 +149,18 @@ for (int i = 0; i < NUM_NODES; i++)
 }
 ```
 
-### Configure the resource
+#### Configure the Resource
 
 A _resource_ represents the actual task performed by the nodes. It can be a database, index, topic, queue or any other processing entity.
 A _resource_ can be divided into many sub-parts known as _partitions_.
 
 
-#### Define the _state model_ and _constraints_
+##### Define the State Model and Constraints
 
 For scalability and fault tolerance, each partition can have one or more replicas.
-The _state model_ allows one to declare the system behavior by first enumerating the various STATES, and the TRANSITIONS between them.
+The __state model__ allows one to declare the system behavior by first enumerating the various STATES, and the TRANSITIONS between them.
 A simple model is ONLINE-OFFLINE where ONLINE means the task is active and OFFLINE means it\'s not active.
-You can also specify how many replicas must be in each state, these are known as _constraints_.
+You can also specify how many replicas must be in each state, these are known as __constraints__.
 For example, in a search system, one might need more than one node serving the same index to handle the load.
 
 The allowed states:
@@ -225,10 +225,10 @@ OR
 admin.addStateModelDef(CLUSTER_NAME, STATE_MODEL_NAME, stateModelDefinition);
 ```
 
-#### Assigning partitions to nodes
+##### Assigning Partitions to Nodes
 
 The final goal of Helix is to ensure that the constraints on the state model are satisfied.
-Helix does this by assigning a STATE to a partition (such as MASTER, SLAVE), and placing it on a particular node.
+Helix does this by assigning a __state__ to a partition (such as MASTER, SLAVE), and placing it on a particular node.
 
 There are 3 assignment modes Helix can operate on
 

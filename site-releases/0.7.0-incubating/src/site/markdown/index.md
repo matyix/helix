@@ -18,23 +18,18 @@ under the License.
 -->
 
 <head>
-  <title>Home</title>
+  <title>Helix 0.7.0-incubating Documentation [ALPHA]</title>
 </head>
 
-__Alpha!__ This release contains many new features, but things might not work just right, and some APIs are still in the process of being developed.
+### Get Helix
 
-Navigating the Documentation
-----------------------------
+[Download](./download.html)
 
-### Conceptual Understanding
+[Building](./Building.html)
 
-[Concepts / Terminology](./Concepts.html)
+[Release Notes](./releasenotes/release-0.7.0-incubating.html)
 
-[Architecture](./Architecture.html)
-
-### Hands-on Helix
-
-[Getting Helix](./Building.html)
+### Hands-On
 
 [Quickstart](./Quickstart.html)
 
@@ -52,11 +47,12 @@ Navigating the Documentation
 
 [Service discovery](./recipes/service_discovery.html)
 
-[Distributed Task DAG Execution](./recipes/task_dag_execution.html)
+[Distributed task DAG execution](./recipes/task_dag_execution.html)
 
 [User-Defined Rebalancer Example](./recipes/user_def_rebalancer.html)
 
-### Download
+---
 
-[0.7.0-incubating](./download.html)
+### Alpha!
+This release contains many new features, but things might not work just right, and some APIs are still in the process of being developed.
 

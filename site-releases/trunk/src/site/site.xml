@@ -17,12 +17,12 @@
 -->
 <project name="Apache Helix">
   <bannerLeft>
-    <src>images/helix-logo.jpg</src>
-    <href>http://helix.incubator.apache.org/site-releases/0.7.0-incubating-site</href>
+    <src>../../images/helix-logo.jpg</src>
+    <href>http://helix.incubator.apache.org/</href>
   </bannerLeft>
   <bannerRight>
-    <src>http://incubator.apache.org/images/egg-logo.png</src>
-    <href>http://incubator.apache.org/</href>
+    <src>../../images/feather_small.gif</src>
+    <href>http://www.apache.org/</href>
   </bannerRight>
   <version position="none"/>
 
@@ -58,17 +58,18 @@
       <item name="trunk" href="http://helix.incubator.apache.org/site-releases/trunk-site/"/>
     </breadcrumbs>
 
-    <menu name="Apache Helix">
-      <item name="Home" href="../../index.html"/>
+    <links>
+      <item name="Helix trunk" href="./index.html"/>
+    </links>
+
+    <menu name="Get Helix">
+      <item name="Building" href="./Building.html"/>
     </menu>
 
-    <menu name="Helix Trunk">
-      <item name="Introduction" href="./index.html"/>
-      <item name="Getting Helix" href="./Building.html"/>
-      <item name="Core concepts" href="./Concepts.html"/>
-      <item name="Architecture" href="./Architecture.html"/>
+    <menu name="Hands-On">
       <item name="Quick Start" href="./Quickstart.html"/>
       <item name="Tutorial" href="./Tutorial.html"/>
+      <item name="Javadocs" href="http://helix.incubator.apache.org/apidocs"/>
     </menu>
 
     <menu name="Recipes">
@@ -102,9 +103,29 @@
   </body>
 
   <custom>
-    <fluidoSkin>
+    <reflowSkin>
+      <theme>bootswatch-cerulean</theme>
+      <highlightJs>false</highlightJs>
+      <brand>
+        <name>Apache Helix</name>
+        <href>http://helix.incubator.apache.org</href>
+      </brand>
+      <slogan>A cluster management framework for partitioned and replicated distributed resources</slogan>
+      <bottomNav>
+        <column>Get Helix</column>
+        <column>Hands-On</column>
+        <column>Recipes</column>
+      </bottomNav>
+      <pages>
+        <index>
+          <sections>
+            <columns>3</columns>
+          </sections>
+        </index>
+      </pages>
+    </reflowSkin>
+    <!--fluidoSkin>
       <topBarEnabled>true</topBarEnabled>
-      <!-- twitter link work only with sidebar disabled -->
       <sideBarEnabled>true</sideBarEnabled>
       <googleSearch></googleSearch>
       <twitter>
@@ -112,7 +133,7 @@
         <showUser>true</showUser>
         <showFollowers>false</showFollowers>
       </twitter>
-    </fluidoSkin>
+    </fluidoSkin-->
   </custom>
 
 </project>

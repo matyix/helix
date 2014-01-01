@@ -16,17 +16,18 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+
 Lock Manager with a User-Defined Rebalancer
 -------------------------------------------
 Helix is able to compute node preferences and state assignments automatically using general-purpose algorithms. In many cases, a distributed system implementer may choose to instead define a customized approach to computing the location of replicas, the state mapping, or both in response to the addition or removal of participants. The following is an implementation of the [Distributed Lock Manager](./lock_manager.html) that includes a user-defined rebalancer.
 
-### Define the cluster and locks
+### Define the Cluster and Resource
 
 The YAML file below fully defines the cluster and the locks. A lock can be in one of two states: locked and unlocked. Transitions can happen in either direction, and the locked is preferred. A resource in this example is the entire collection of locks to distribute. A partition is mapped to a lock; in this case that means there are 12 locks. These 12 locks will be distributed across 3 nodes. The constraints indicate that only one replica of a lock can be in the locked state at any given time. These locks can each only have a single holder, defined by a replica count of 1.
 
-Notice the rebalancer section of the definition. The mode is set to USER_DEFINED and the class name refers to the plugged-in rebalancer implementation that inherits from [HelixRebalancer](http://helix.incubator.apache.org/javadocs/0.7.0-incubating/reference/org/apache/helix/controller/rebalancer/HelixRebalancer.html). This implementation is called whenever the state of the cluster changes, as is the case when participants are added or removed from the system.
+Notice the rebalancer section of the definition. The mode is set to USER_DEFINED and the class name refers to the plugged-in rebalancer implementation that inherits from [HelixRebalancer](http://helix.incubator.apache.org/apidocs/reference/org/apache/helix/controller/rebalancer/HelixRebalancer.html). This implementation is called whenever the state of the cluster changes, as is the case when participants are added or removed from the system.
 
-Location: incubator-helix/recipes/user-rebalanced-lock-manager/src/main/resources/lock-manager-config.yaml
+Location: `incubator-helix/recipes/user-defined-rebalancer/src/main/resources/lock-manager-config.yaml`
 
 ```
 clusterName: lock-manager-custom-rebalancer # unique name for the cluster
@@ -92,28 +93,32 @@ InputStream input =
 YAMLClusterSetup.YAMLClusterConfig config = setup.setupCluster(input);
 ```
 
-### Write a rebalancer
-Below is a full implementation of a rebalancer that extends [HelixRebalancer](http://helix.incubator.apache.org/javadocs/0.7.0-incubating/reference/org/apache/helix/controller/rebalancer/HelixRebalancer.html). In this case, it simply throws out the previous resource assignment, computes the target node for as many partition replicas as can hold a lock in the LOCKED state (in this example, one), and assigns them the LOCKED state (which is at the head of the state preference list). Clearly a more robust implementation would likely examine the current ideal state to maintain current assignments, and the full state list to handle models more complicated than this one. However, for a simple lock holder implementation, this is sufficient.
+### Write a Rebalancer
+Below is a full implementation of a rebalancer that extends [HelixRebalancer](http://helix.incubator.apache.org/apidocs/reference/org/apache/helix/controller/rebalancer/HelixRebalancer.html). In this case, it simply throws out the previous resource assignment, computes the target node for as many partition replicas as can hold a lock in the LOCKED state (in this example, one), and assigns them the LOCKED state (which is at the head of the state preference list). Clearly a more robust implementation would likely examine the current ideal state to maintain current assignments, and the full state list to handle models more complicated than this one. However, for a simple lock holder implementation, this is sufficient.
 
-Location: incubator-helix/recipes/user-rebalanced-lock-manager/src/main/java/org/apache/helix/userdefinedrebalancer/LockManagerRebalancer.java
+Location: `incubator-helix/recipes/user-rebalanced-lock-manager/src/main/java/org/apache/helix/userdefinedrebalancer/LockManagerRebalancer.java`
 
 ```
 @Override
-public ResourceAssignment computeResourceMapping(RebalancerConfig rebalancerConfig, Cluster cluster,
-    ResourceCurrentState currentState) {
-  // Get the rebalcancer context (a basic partitioned one)
-  PartitionedRebalancerContext context = rebalancerConfig.getRebalancerContext(
-      PartitionedRebalancerContext.class);
+public void init(HelixManager manager, ControllerContextProvider contextProvider) {
+  // do nothing; this rebalancer is independent of the manager
+}
+
+@Override
+public ResourceAssignment computeResourceMapping(RebalancerConfig rebalancerConfig,
+    ResourceAssignment prevAssignment, Cluster cluster, ResourceCurrentState currentState) {
+  // get a typed config
+  PartitionedRebalancerConfig config = PartitionedRebalancerConfig.from(rebalancerConfig);
 
   // Initialize an empty mapping of locks to participants
-  ResourceAssignment assignment = new ResourceAssignment(context.getResourceId());
+  ResourceAssignment assignment = new ResourceAssignment(config.getResourceId());
 
   // Get the list of live participants in the cluster
-  List<ParticipantId> liveParticipants = new ArrayList<ParticipantId>(
-      cluster.getLiveParticipantMap().keySet());
+  List<ParticipantId> liveParticipants =
+      new ArrayList<ParticipantId>(cluster.getLiveParticipantMap().keySet());
 
   // Get the state model (should be a simple lock/unlock model) and the highest-priority state
-  StateModelDefId stateModelDefId = context.getStateModelDefId();
+  StateModelDefId stateModelDefId = config.getStateModelDefId();
   StateModelDefinition stateModelDef = cluster.getStateModelMap().get(stateModelDefId);
   if (stateModelDef.getStatesPriorityList().size() < 1) {
     LOG.error("Invalid state model definition. There should be at least one state.");
@@ -139,7 +144,7 @@ public ResourceAssignment computeResourceMapping(RebalancerConfig rebalancerConf
   // This assumes a simple lock-unlock model where the only state of interest is which nodes have
   // acquired each lock.
   int i = 0;
-  for (PartitionId partition : context.getPartitionSet()) {
+  for (PartitionId partition : config.getPartitionSet()) {
     Map<ParticipantId, State> replicaMap = new HashMap<ParticipantId, State>();
     for (int j = i; j < i + lockHolders; j++) {
       int participantIndex = j % liveParticipants.size();
@@ -156,10 +161,10 @@ public ResourceAssignment computeResourceMapping(RebalancerConfig rebalancerConf
 }
 ```
 
-### Start up the participants
+### Start up the Participants
 Here is a lock class based on the newly defined lock-unlock state model so that the participant can receive callbacks on state transitions.
 
-Location: incubator-helix/recipes/user-rebalanced-lock-manager/src/main/java/org/apache/helix/userdefinedrebalancer/Lock.java
+Location: `incubator-helix/recipes/user-rebalanced-lock-manager/src/main/java/org/apache/helix/userdefinedrebalancer/Lock.java`
 
 ```
 public class Lock extends StateModel {
@@ -183,7 +188,7 @@ public class Lock extends StateModel {
 
 Here is the factory to make the Lock class accessible.
 
-Location: incubator-helix/recipes/user-rebalanced-lock-manager/src/main/java/org/apache/helix/userdefinedrebalancer/LockFactory.java
+Location: `incubator-helix/recipes/user-rebalanced-lock-manager/src/main/java/org/apache/helix/userdefinedrebalancer/LockFactory.java`
 
 ```
 public class LockFactory extends StateModelFactory<Lock> {
@@ -205,7 +210,7 @@ participantManager.getStateMachineEngine().registerStateModelFactory(stateModelN
 participantManager.connect();
 ```
 
-### Start up the controller
+### Start up the Controller
 
 ```
 controllerManager =
@@ -213,13 +218,13 @@ controllerManager =
         HelixControllerMain.STANDALONE);
 ```
 
-### Try it out
-#### Building 
+### Try It Out
+
 ```
 git clone https://git-wip-us.apache.org/repos/asf/incubator-helix.git
 cd incubator-helix
 mvn clean install package -DskipTests
-cd recipes/user-rebalanced-lock-manager/target/user-rebalanced-lock-manager-pkg/bin
+cd recipes/user-defined-rebalancer/target/user-defined-rebalancer-pkg/bin
 chmod +x *
 ./lock-manager-demo.sh
 ```
@@ -227,7 +232,7 @@ chmod +x *
 #### Output
 
 ```
-./lock-manager-demo 
+./lock-manager-demo
 STARTING localhost_12002
 STARTING localhost_12001
 STARTING localhost_12003

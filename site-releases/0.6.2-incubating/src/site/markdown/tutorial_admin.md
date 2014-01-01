@@ -21,45 +21,46 @@ under the License.
   <title>Tutorial - Admin Operations</title>
 </head>
 
-# [Helix Tutorial](./Tutorial.html): Admin Operations
+## [Helix Tutorial](./Tutorial.html): Admin Operations
 
-Helix provides a set of admin api for cluster management operations. They are supported via:
+Helix provides a set of admin APIs for cluster management operations. They are supported via:
 
-* _Java API_
-* _Commandline interface_
-* _REST interface via helix-admin-webapp_
+* Java API
+* Command Line Interface
+* REST Interface via helix-admin-webapp
 
 ### Java API
 See interface [_org.apache.helix.HelixAdmin_](http://helix.incubator.apache.org/javadocs/0.6.2-incubating/reference/org/apache/helix/HelixAdmin.html)
 
-### Command-line interface
-The command-line tool comes with helix-core package:
+### Command Line Interface
+The command line tool comes with helix-core package:
 
-Get the command-line tool:
+Get the command line tool:
 
-``` 
-  - git clone https://git-wip-us.apache.org/repos/asf/incubator-helix.git
-  - cd incubator-helix
-  - ./build
-  - cd helix-core/target/helix-core-pkg/bin
-  - chmod +x *.sh
+```
+git clone https://git-wip-us.apache.org/repos/asf/incubator-helix.git
+cd incubator-helix
+git checkout tags/helix-0.6.2-incubating
+./build
+cd helix-core/target/helix-core-pkg/bin
+chmod +x *.sh
 ```
 
 Get help:
 
 ```
-  - ./helix-admin.sh --help
+./helix-admin.sh --help
 ```
 
 All other commands have this form:
 
 ```
-  ./helix-admin.sh --zkSvr <ZookeeperServerAddress> <command> <parameters>
+./helix-admin.sh --zkSvr <ZookeeperServerAddress> <command> <parameters>
 ```
 
-Admin commands and brief description:
+#### Supported Commands
 
-| Command syntax | Description |
+| Command Syntax | Description |
 | -------------- | ----------- |
 | _\-\-activateCluster \<clusterName controllerCluster true/false\>_ | Enable/disable a cluster in distributed controller mode |
 | _\-\-addCluster \<clusterName\>_ | Add a new cluster |
@@ -102,17 +103,18 @@ Admin commands and brief description:
 | _\-\-swapInstance \<clusterName oldInstance newInstance\>_ | Swap an old instance with a new instance |
 | _\-\-zkSvr \<ZookeeperServerAddress\>_ | Provide zookeeper address |
 
-### REST interface
+### REST Interface
 
 The REST interface comes wit helix-admin-webapp package:
 
-``` 
-  - git clone https://git-wip-us.apache.org/repos/asf/incubator-helix.git
-  - cd incubator-helix 
-  - ./build
-  - cd helix-admin-webapp/target/helix-admin-webapp-pkg/bin
-  - chmod +x *.sh
-  - ./run-rest-admin.sh --zkSvr <zookeeperAddress> --port <port> // make sure zookeeper is running
+```
+git clone https://git-wip-us.apache.org/repos/asf/incubator-helix.git
+cd incubator-helix
+git checkout tags/helix-0.6.2-incubating
+./build
+cd helix-admin-webapp/target/helix-admin-webapp-pkg/bin
+chmod +x *.sh
+./run-rest-admin.sh --zkSvr <zookeeperAddress> --port <port> // make sure ZooKeeper is running
 ```
 
 #### URL and support methods
@@ -121,75 +123,75 @@ The REST interface comes wit helix-admin-webapp package:
     * List all clusters
 
     ```
-      curl http://localhost:8100/clusters
+    curl http://localhost:8100/clusters
     ```
 
     * Add a cluster
-    
+
     ```
-      curl -d 'jsonParameters={"command":"addCluster","clusterName":"MyCluster"}' -H "Content-Type: application/json" http://localhost:8100/clusters
+    curl -d 'jsonParameters={"command":"addCluster","clusterName":"MyCluster"}' -H "Content-Type: application/json" http://localhost:8100/clusters
     ```
 
 * _/clusters/{clusterName}_
     * List cluster information
-    
+
     ```
-      curl http://localhost:8100/clusters/MyCluster
+    curl http://localhost:8100/clusters/MyCluster
     ```
 
     * Enable/disable a cluster in distributed controller mode
-    
+
     ```
-      curl -d 'jsonParameters={"command":"activateCluster","grandCluster":"MyControllerCluster","enabled":"true"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster
+    curl -d 'jsonParameters={"command":"activateCluster","grandCluster":"MyControllerCluster","enabled":"true"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster
     ```
 
     * Remove a cluster
-    
+
     ```
-      curl -X DELETE http://localhost:8100/clusters/MyCluster
+    curl -X DELETE http://localhost:8100/clusters/MyCluster
     ```
-    
+
 * _/clusters/{clusterName}/resourceGroups_
     * List all resources in a cluster
-    
+
     ```
-      curl http://localhost:8100/clusters/MyCluster/resourceGroups
+    curl http://localhost:8100/clusters/MyCluster/resourceGroups
     ```
-    
+
     * Add a resource to cluster
-    
+
     ```
-      curl -d 'jsonParameters={"command":"addResource","resourceGroupName":"MyDB","partitions":"8","stateModelDefRef":"MasterSlave" }' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/resourceGroups
+    curl -d 'jsonParameters={"command":"addResource","resourceGroupName":"MyDB","partitions":"8","stateModelDefRef":"MasterSlave" }' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/resourceGroups
     ```
 
 * _/clusters/{clusterName}/resourceGroups/{resourceName}_
     * List resource information
-    
+
     ```
-      curl http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB
+    curl http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB
     ```
-    
+
     * Drop a resource
-    
+
     ```
-      curl -X DELETE http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB
+    curl -X DELETE http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB
     ```
 
     * Reset all erroneous partitions of a resource
-    
+
     ```
-      curl -d 'jsonParameters={"command":"resetResource"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB
+    curl -d 'jsonParameters={"command":"resetResource"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB
     ```
 
 * _/clusters/{clusterName}/resourceGroups/{resourceName}/idealState_
     * Rebalance a resource
-    
+
     ```
-      curl -d 'jsonParameters={"command":"rebalance","replicas":"3"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB/idealState
+    curl -d 'jsonParameters={"command":"rebalance","replicas":"3"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB/idealState
     ```
 
     * Add an ideal state
-    
+
     ```
     echo jsonParameters={
     "command":"addIdealState"
@@ -215,193 +217,192 @@ The REST interface comes wit helix-admin-webapp package:
     > newIdealState.json
     curl -d @'./newIdealState.json' -H 'Content-Type: application/json' http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB/idealState
     ```
-    
+
     * Add resource property
-    
+
     ```
-      curl -d 'jsonParameters={"command":"addResourceProperty","REBALANCE_TIMER_PERIOD":"500"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB/idealState
+    curl -d 'jsonParameters={"command":"addResourceProperty","REBALANCE_TIMER_PERIOD":"500"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB/idealState
     ```
-    
+
 * _/clusters/{clusterName}/resourceGroups/{resourceName}/externalView_
     * Show resource external view
-    
+
     ```
-      curl http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB/externalView
+    curl http://localhost:8100/clusters/MyCluster/resourceGroups/MyDB/externalView
     ```
 * _/clusters/{clusterName}/instances_
     * List all instances
-    
+
     ```
-      curl http://localhost:8100/clusters/MyCluster/instances
+    curl http://localhost:8100/clusters/MyCluster/instances
     ```
 
     * Add an instance
-    
+
     ```
     curl -d 'jsonParameters={"command":"addInstance","instanceNames":"localhost_1001"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/instances
     ```
-    
+
     * Swap an instance
-    
+
     ```
-      curl -d 'jsonParameters={"command":"swapInstance","oldInstance":"localhost_1001", "newInstance":"localhost_1002"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/instances
+    curl -d 'jsonParameters={"command":"swapInstance","oldInstance":"localhost_1001", "newInstance":"localhost_1002"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/instances
     ```
 * _/clusters/{clusterName}/instances/{instanceName}_
     * Show instance information
-    
+
     ```
-      curl http://localhost:8100/clusters/MyCluster/instances/localhost_1001
+    curl http://localhost:8100/clusters/MyCluster/instances/localhost_1001
     ```
-    
+
     * Enable/disable an instance
-    
+
     ```
-      curl -d 'jsonParameters={"command":"enableInstance","enabled":"false"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/instances/localhost_1001
+    curl -d 'jsonParameters={"command":"enableInstance","enabled":"false"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/instances/localhost_1001
     ```
 
     * Drop an instance
-    
+
     ```
-      curl -X DELETE http://localhost:8100/clusters/MyCluster/instances/localhost_1001
+    curl -X DELETE http://localhost:8100/clusters/MyCluster/instances/localhost_1001
     ```
-    
+
     * Disable/enable partitions on an instance
-    
+
     ```
-      curl -d 'jsonParameters={"command":"enablePartition","resource": "MyDB","partition":"MyDB_0",  "enabled" : "false"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/instances/localhost_1001
+    curl -d 'jsonParameters={"command":"enablePartition","resource": "MyDB","partition":"MyDB_0",  "enabled" : "false"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/instances/localhost_1001
     ```
-    
+
     * Reset an erroneous partition on an instance
-    
+
     ```
-      curl -d 'jsonParameters={"command":"resetPartition","resource": "MyDB","partition":"MyDB_0"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/instances/localhost_1001
+    curl -d 'jsonParameters={"command":"resetPartition","resource": "MyDB","partition":"MyDB_0"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/instances/localhost_1001
     ```
 
     * Reset all erroneous partitions on an instance
-    
+
     ```
-      curl -d 'jsonParameters={"command":"resetInstance"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/instances/localhost_1001
+    curl -d 'jsonParameters={"command":"resetInstance"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/instances/localhost_1001
     ```
 
 * _/clusters/{clusterName}/configs_
     * Get user cluster level config
-    
+
     ```
-      curl http://localhost:8100/clusters/MyCluster/configs/cluster
+    curl http://localhost:8100/clusters/MyCluster/configs/cluster
     ```
-    
+
     * Set user cluster level config
-    
+
     ```
-      curl -d 'jsonParameters={"command":"setConfig","configs":"key1=value1,key2=value2"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/configs/cluster
+    curl -d 'jsonParameters={"command":"setConfig","configs":"key1=value1,key2=value2"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/configs/cluster
     ```
 
     * Remove user cluster level config
-    
+
     ```
     curl -d 'jsonParameters={"command":"removeConfig","configs":"key1,key2"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/configs/cluster
     ```
-    
+
     * Get/set/remove user participant level config
-    
+
     ```
-      curl -d 'jsonParameters={"command":"setConfig","configs":"key1=value1,key2=value2"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/configs/participant/localhost_1001
+    curl -d 'jsonParameters={"command":"setConfig","configs":"key1=value1,key2=value2"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/configs/participant/localhost_1001
     ```
-    
+
     * Get/set/remove resource level config
-    
+
     ```
     curl -d 'jsonParameters={"command":"setConfig","configs":"key1=value1,key2=value2"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/configs/resource/MyDB
     ```
 
 * _/clusters/{clusterName}/controller_
     * Show controller information
-    
+
     ```
-      curl http://localhost:8100/clusters/MyCluster/Controller
+    curl http://localhost:8100/clusters/MyCluster/Controller
     ```
-    
+
     * Enable/disable cluster
-    
+
     ```
-      curl -d 'jsonParameters={"command":"enableCluster","enabled":"false"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/Controller
+    curl -d 'jsonParameters={"command":"enableCluster","enabled":"false"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/Controller
     ```
 
 * _/zkPath/{path}_
     * Get information for zookeeper path
-    
+
     ```
-      curl http://localhost:8100/zkPath/MyCluster
+    curl http://localhost:8100/zkPath/MyCluster
     ```
 
 * _/clusters/{clusterName}/StateModelDefs_
     * Show all state model definitions
-    
+
     ```
-      curl http://localhost:8100/clusters/MyCluster/StateModelDefs
+    curl http://localhost:8100/clusters/MyCluster/StateModelDefs
     ```
 
     * Add a state mdoel definition
-    
+
     ```
-      echo jsonParameters={
-        "command":"addStateModelDef"
-       }&newStateModelDef={
-          "id" : "OnlineOffline",
-          "simpleFields" : {
-            "INITIAL_STATE" : "OFFLINE"
-          },
-          "listFields" : {
-            "STATE_PRIORITY_LIST" : [ "ONLINE", "OFFLINE", "DROPPED" ],
-            "STATE_TRANSITION_PRIORITYLIST" : [ "OFFLINE-ONLINE", "ONLINE-OFFLINE", "OFFLINE-DROPPED" ]
-          },
-          "mapFields" : {
-            "DROPPED.meta" : {
-              "count" : "-1"
-            },
-            "OFFLINE.meta" : {
-              "count" : "-1"
-            },
-            "OFFLINE.next" : {
-              "DROPPED" : "DROPPED",
-              "ONLINE" : "ONLINE"
-            },
-            "ONLINE.meta" : {
-              "count" : "R"
-            },
-            "ONLINE.next" : {
-              "DROPPED" : "OFFLINE",
-              "OFFLINE" : "OFFLINE"
-            }
-          }
+    echo jsonParameters={
+      "command":"addStateModelDef"
+    }&newStateModelDef={
+      "id" : "OnlineOffline",
+      "simpleFields" : {
+        "INITIAL_STATE" : "OFFLINE"
+      },
+      "listFields" : {
+        "STATE_PRIORITY_LIST" : [ "ONLINE", "OFFLINE", "DROPPED" ],
+        "STATE_TRANSITION_PRIORITYLIST" : [ "OFFLINE-ONLINE", "ONLINE-OFFLINE", "OFFLINE-DROPPED" ]
+      },
+      "mapFields" : {
+        "DROPPED.meta" : {
+          "count" : "-1"
+        },
+        "OFFLINE.meta" : {
+          "count" : "-1"
+        },
+        "OFFLINE.next" : {
+          "DROPPED" : "DROPPED",
+          "ONLINE" : "ONLINE"
+        },
+        "ONLINE.meta" : {
+          "count" : "R"
+        },
+        "ONLINE.next" : {
+          "DROPPED" : "OFFLINE",
+          "OFFLINE" : "OFFLINE"
         }
-        > newStateModelDef.json
-        curl -d @'./untitled.txt' -H 'Content-Type: application/json' http://localhost:8100/clusters/MyCluster/StateModelDefs
+      }
+    }
+    > newStateModelDef.json
+    curl -d @'./untitled.txt' -H 'Content-Type: application/json' http://localhost:8100/clusters/MyCluster/StateModelDefs
     ```
 
 * _/clusters/{clusterName}/StateModelDefs/{stateModelDefName}_
     * Show a state model definition
-    
+
     ```
-      curl http://localhost:8100/clusters/MyCluster/StateModelDefs/OnlineOffline
+    curl http://localhost:8100/clusters/MyCluster/StateModelDefs/OnlineOffline
     ```
 
 * _/clusters/{clusterName}/constraints/{constraintType}_
     * Show all contraints
-    
+
     ```
-      curl http://localhost:8100/clusters/MyCluster/constraints/MESSAGE_CONSTRAINT
+    curl http://localhost:8100/clusters/MyCluster/constraints/MESSAGE_CONSTRAINT
     ```
 
     * Set a contraint
-    
+
     ```
-       curl -d 'jsonParameters={"constraintAttributes":"RESOURCE=MyDB,CONSTRAINT_VALUE=1"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/constraints/MESSAGE_CONSTRAINT/MyConstraint
-    ```
-    
-    * Remove a constraint
-    
-    ```
-      curl -X DELETE http://localhost:8100/clusters/MyCluster/constraints/MESSAGE_CONSTRAINT/MyConstraint
+    curl -d 'jsonParameters={"constraintAttributes":"RESOURCE=MyDB,CONSTRAINT_VALUE=1"}' -H "Content-Type: application/json" http://localhost:8100/clusters/MyCluster/constraints/MESSAGE_CONSTRAINT/MyConstraint
     ```
 
+    * Remove a constraint
+
+    ```
+    curl -X DELETE http://localhost:8100/clusters/MyCluster/constraints/MESSAGE_CONSTRAINT/MyConstraint
+    ```

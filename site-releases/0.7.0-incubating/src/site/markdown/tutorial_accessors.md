@@ -21,7 +21,7 @@ under the License.
   <title>Tutorial - Logical Accessors</title>
 </head>
 
-# [Helix Tutorial](./Tutorial.html): Logical Accessors
+## [Helix Tutorial](./Tutorial.html): Logical Accessors
 
 Helix constructs follow a logical hierarchy. A cluster contains participants, and serve logical resources. Each resource can be divided into partitions, which themselves can be replicated. Helix now supports configuring and modifying clusters programmatically in a hierarchical way using logical accessors.
 

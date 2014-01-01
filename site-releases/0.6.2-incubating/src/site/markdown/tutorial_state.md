@@ -21,31 +21,31 @@ under the License.
   <title>Tutorial - State Machine Configuration</title>
 </head>
 
-# [Helix Tutorial](./Tutorial.html): State Machine Configuration
+## [Helix Tutorial](./Tutorial.html): State Machine Configuration
 
 In this chapter, we\'ll learn about the state models provided by Helix, and how to create your own custom state model.
 
-## State Models
+### State Models
 
-Helix comes with 3 default state models that are commonly used.  It is possible to have multiple state models in a cluster. 
+Helix comes with 3 default state models that are commonly used.  It is possible to have multiple state models in a cluster.
 Every resource that is added should be configured to use a state model that govern its _ideal state_.
 
-### MASTER-SLAVE
+#### MASTER-SLAVE
 
 * 3 states: OFFLINE, SLAVE, MASTER
 * Maximum number of masters: 1
 * Slaves are based on the replication factor. The replication factor can be specified while adding the resource.
 
 
-### ONLINE-OFFLINE
+#### ONLINE-OFFLINE
 
 * Has 2 states: OFFLINE and ONLINE.  This simple state model is a good starting point for most applications.
 
-### LEADER-STANDBY
+#### LEADER-STANDBY
 
 * 1 Leader and multiple stand-bys.  The idea is that exactly one leader accomplishes a designated task, the stand-bys are ready to take over if the leader fails.
 
-## Constraints
+### Constraints
 
 In addition to the state machine configuration, one can specify the constraints of states and transitions.
 
@@ -54,38 +54,40 @@ For example, one can say:
 * MASTER:1
 <br/>Maximum number of replicas in MASTER state at any time is 1
 
-* OFFLINE-SLAVE:5 
+* OFFLINE-SLAVE:5
 <br/>Maximum number of OFFLINE-SLAVE transitions that can happen concurrently in the system is 5 in this example.
 
-### Dynamic State Constraints
+#### Dynamic State Constraints
 
 We also support two dynamic upper bounds for the number of replicas in each state:
 
 * N: The number of replicas in the state is at most the number of live participants in the cluster
 * R: The number of replicas in the state is at most the specified replica count for the partition
 
-### State Priority
+#### State Priority
 
 Helix uses a greedy approach to satisfy the state constraints. For example, if the state machine configuration says it needs 1 MASTER and 2 SLAVES, but only 1 node is active, Helix must promote it to MASTER. This behavior is achieved by providing the state priority list as \[MASTER, SLAVE\].
 
-### State Transition Priority
+#### State Transition Priority
 
 Helix tries to fire as many transitions as possible in parallel to reach the stable state without violating constraints. By default, Helix simply sorts the transitions alphabetically and fires as many as it can without violating the constraints. You can control this by overriding the priority order.
 
-## Special States
+### Special States
 
-### DROPPED
+There are a few Helix-defined states that are important to be aware of.
+
+#### DROPPED
 
 The DROPPED state is used to signify a replica that was served by a given participant, but is no longer served. This allows Helix and its participants to effectively clean up. There are two requirements that every new state model should follow with respect to the DROPPED state:
 
 * The DROPPED state must be defined
 * There must be a path to DROPPED for every state in the model
 
-### ERROR
+#### ERROR
 
 The ERROR state is used whenever the participant serving a partition encountered an error and cannot continue to serve the partition. HelixAdmin has \"reset\" functionality to allow for participants to recover from the ERROR state.
 
-## Annotated Example
+### Annotated Example
 
 Below is a complete definition of a Master-Slave state model. Notice the fields marked REQUIRED; these are essential for any state model definition.
 
@@ -127,5 +129,3 @@ StateModelDefinition stateModel = new StateModelDefinition.Builder("MasterSlave"
   // Use the isValid() function to make sure the StateModelDefinition will work without issues
   Assert.assertTrue(stateModel.isValid());
 ```
-
-

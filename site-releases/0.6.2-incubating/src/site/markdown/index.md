@@ -18,21 +18,18 @@ under the License.
 -->
 
 <head>
-  <title>Home</title>
+  <title>Helix 0.6.2-incubating Documentation</title>
 </head>
 
-Navigating the Documentation
-----------------------------
+### Get Helix
 
-### Conceptual Understanding
+[Download](./download.html)
 
-[Concepts / Terminology](./Concepts.html)
+[Building](./Building.html)
 
-[Architecture](./Architecture.html)
+[Release Notes](./releasenotes/release-0.6.2-incubating.html)
 
-### Hands-on Helix
-
-[Getting Helix](./Building.html)
+### Hands-On
 
 [Quickstart](./Quickstart.html)
 
@@ -50,9 +47,5 @@ Navigating the Documentation
 
 [Service discovery](./recipes/service_discovery.html)
 
-[Distributed Task DAG Execution](./recipes/task_dag_execution.html)
-
-### Download
-
-[0.6.2-incubating](./download.html)
+[Distributed task DAG execution](./recipes/task_dag_execution.html)
 

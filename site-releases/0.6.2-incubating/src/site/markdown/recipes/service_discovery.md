@@ -19,95 +19,90 @@ under the License.
 Service Discovery
 -----------------
 
-One of the common usage of zookeeper is enable service discovery. 
-The basic idea is that when a server starts up it advertises its configuration/metadata such as host name port etc on zookeeper. 
-This allows clients to dynamically discover the servers that are currently active. One can think of this like a service registry to which a server registers when it starts and 
-is automatically deregistered when it shutdowns or crashes. In many cases it serves as an alternative to vips.
+One of the common usage of ZooKeeper is to enable service discovery.
+The basic idea is that when a server starts up it advertises its configuration/metadata such as its hostname and port on ZooKeeper.
+This allows clients to dynamically discover the servers that are currently active. One can think of this like a service registry to which a server registers when it starts and
+is automatically deregistered when it shutdowns or crashes. In many cases it serves as an alternative to VIPs.
 
-The core idea behind this is to use zookeeper ephemeral nodes. The ephemeral nodes are created when the server registers and all its metadata is put into a znode. 
-When the server shutdowns, zookeeper automatically removes this znode. 
+The core idea behind this is to use ZooKeeper ephemeral nodes. The ephemeral nodes are created when the server registers and all its metadata is put into a ZNode.
+When the server shutdowns, ZooKeeper automatically removes this ZNode.
 
-There are two ways the clients can dynamically discover the active servers
+There are two ways the clients can dynamically discover the active servers:
 
-#### ZOOKEEPER WATCH
+### ZooKeeper Watch
 
-Clients can set a child watch under specific path on zookeeper. 
-When a new service is registered/deregistered, zookeeper notifies the client via watchevent and the client can read the list of services. Even though this looks trivial, 
-there are lot of things one needs to keep in mind like ensuring that you first set the watch back on zookeeper before reading data from zookeeper.
-
-
-#### POLL
-
-Another approach is for the client to periodically read the zookeeper path and get the list of services.
+Clients can set a child watch under specific path on ZooKeeper.
+When a new service is registered/deregistered, ZooKeeper notifies the client via a watch event and the client can read the list of services. Even though this looks trivial,
+there are lot of things one needs to keep in mind like ensuring that you first set the watch back on ZooKeeper before reading data.
 
 
-Both approaches have pros and cons, for example setting a watch might trigger herd effect if there are large number of clients. This is worst especially when servers are starting up. 
-But good thing about setting watch is that clients are immediately notified of a change which is not true in case of polling. 
-In some cases, having both WATCH and POLL makes sense, WATCH allows one to get notifications as soon as possible while POLL provides a safety net if a watch event is missed because of code bug or zookeeper fails to notify.
+### Poll
 
-##### Other important scenarios to take care of
-* What happens when zookeeper session expires. All the watches/ephemeral nodes previously added/created by this server are lost. 
-One needs to add the watches again , recreate the ephemeral nodes etc.
-* Due to network issues or java GC pauses session expiry might happen again and again also known as flapping. Its important for the server to detect this and deregister itself.
+Another approach is for the client to periodically read the ZooKeeper path and get the list of services.
 
-##### Other operational things to consider
-* What if the node is behaving badly, one might kill the server but will lose the ability to debug. 
-It would be nice to have the ability to mark a server as disabled and clients know that a node is disabled and will not contact that node.
- 
-#### Configuration ownership
+Both approaches have pros and cons, for example setting a watch might trigger herd effect if there are large number of clients. This is problematic, especially when servers are starting up.
+But the advantage to setting watches is that clients are immediately notified of a change which is not true in case of polling.
+In some cases, having both watches and polls makes sense; watch allows one to get notifications as soon as possible while poll provides a safety net if a watch event is missed because of code bug or ZooKeeper fails to notify.
 
-This is an important aspect that is often ignored in the initial stages of your development. In common, service discovery pattern means that servers start up with some configuration and then simply puts its configuration/metadata in zookeeper. While this works well in the beginning, 
-configuration management becomes very difficult since the servers themselves are statically configured. Any change in server configuration implies restarting of the server. Ideally, it will be nice to have the ability to change configuration dynamically without having to restart a server. 
+### Other Developer Considerations
+* What happens when the ZooKeeper session expires? All the watches and ephemeral nodes previously added or created by this server are lost. One needs to add the watches again, recreate the ephemeral nodes, and so on.
+* Due to network issues or Java GC pauses session expiry might happen again and again; this phenomenon is known as flapping. It\'s important for the server to detect this and deregister itself.
 
-Ideally you want a hybrid solution, a node starts with minimal configuration and gets the rest of configuration from zookeeper.
+### Other Operational Considerations
+* What if the node is behaving badly? One might kill the server, but it will lose the ability to debug. It would be nice to have the ability to mark a server as disabled and clients know that a node is disabled and will not contact that node.
 
-h3. How to use Helix to achieve this
+### Configuration Ownership
 
-Even though Helix has higher level abstraction in terms of statemachine, constraints and objectives, 
-service discovery is one of things that existed since we started. 
-The controller uses the exact mechanism we described above to discover when new servers join the cluster.
-We create these znodes under /CLUSTERNAME/LIVEINSTANCES. 
-Since at any time there is only one controller, we use ZK watch to track the liveness of a server.
+This is an important aspect that is often ignored in the initial stages of your development. Typically, the service discovery pattern means that servers start up with some configuration which it simply puts into ZooKeeper. While this works well in the beginning, configuration management becomes very difficult since the servers themselves are statically configured. Any change in server configuration implies restarting the server. Ideally, it will be nice to have the ability to change configuration dynamically without having to restart a server.
 
-This recipe, simply demonstrate how one can re-use that part for implementing service discovery. This demonstrates multiple MODE's of service discovery
+Ideally you want a hybrid solution, a node starts with minimal configuration and gets the rest of configuration from ZooKeeper.
+
+### Using Helix for Service Discovery
+
+Even though Helix has a higher-level abstraction in terms of state machines, constraints and objectives, service discovery is one of things has been a prevalent use case from the start.
+The controller uses the exact mechanism we described above to discover when new servers join the cluster. We create these ZNodes under /CLUSTERNAME/LIVEINSTANCES.
+Since at any time there is only one controller, we use a ZK watch to track the liveness of a server.
+
+This recipe simply demonstrates how one can re-use that part for implementing service discovery. This demonstrates multiple modes of service discovery:
 
 * POLL: The client reads from zookeeper at regular intervals 30 seconds. Use this if you have 100's of clients
-* WATCH: The client sets up watcher and gets notified of the changes. Use this if you have 10's of clients.
-* NONE: This does neither of the above, but reads directly from zookeeper when ever needed.
+* WATCH: The client sets up watcher and gets notified of the changes. Use this if you have 10's of clients
+* NONE: This does neither of the above, but reads directly from zookeeper when ever needed
 
-Helix provides these additional features compared to other implementations available else where
+Helix provides these additional features compared to other implementations available elsewhere:
 
-* It has the concept of disabling a node which means that a badly behaving node, can be disabled using helix admin api.
-* It automatically detects if a node connects/disconnects from zookeeper repeatedly and disables the node.
-* Configuration management  
-    * Allows one to set configuration via admin api at various granulaties like cluster, instance, resource, partition 
-    * Configuration can be dynamically changed.
-    * Notifies the server when configuration changes.
+* It has the concept of disabling a node which means that a badly behaving node can be disabled using the Helix admin API
+* It automatically detects if a node connects/disconnects from zookeeper repeatedly and disables the node
+* Configuration management
+    * Allows one to set configuration via the admin API at various granulaties like cluster, instance, resource, partition
+    * Configurations can be dynamically changed
+    * The server is notified when configurations change
 
 
-##### checkout and build
+### Checkout and Build
 
 ```
 git clone https://git-wip-us.apache.org/repos/asf/incubator-helix.git
 cd incubator-helix
+git checkout tags/helix-0.6.2-incubating
 mvn clean install package -DskipTests
 cd recipes/service-discovery/target/service-discovery-pkg/bin
 chmod +x *
 ```
 
-##### start zookeeper
+### Start ZooKeeper
 
 ```
 ./start-standalone-zookeeper 2199
 ```
 
-#### Run the demo
+### Run the Demo
 
 ```
 ./service-discovery-demo.sh
 ```
 
-#### Output
+### Output
 
 ```
 START:Service discovery demo mode:WATCH
@@ -186,6 +181,4 @@ START:Service discovery demo mode:NONE
 	Registering service:host.x.y.z_12000
 END:Service discovery demo mode:NONE
 =============================================
-
 ```
-

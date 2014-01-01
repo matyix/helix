@@ -26,7 +26,7 @@ Convention: we first cover the _basic_ approach, which is the easiest to impleme
 
 ### Prerequisites
 
-1. Read [Concepts/Terminology](./Concepts.html) and [Architecture](./Architecture.html)
+1. Read [Concepts/Terminology](../../Concepts.html) and [Architecture](../../Architecture.html)
 2. Read the [Quickstart guide](./Quickstart.html) to learn how Helix models and manages a cluster
 3. Install Helix source.  See: [Quickstart](./Quickstart.html) for the steps.
 
